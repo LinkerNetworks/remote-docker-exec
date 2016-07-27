@@ -24,7 +24,7 @@ func prepare() (endpoint, cert, key, ca string) {
 
 	endpoint = fmt.Sprintf("tcp://%s:%s", ip, port)
 
-	ca, cert, key = ".certs/ca.pem", ".certs/cert.pem", ".certs/key.pem"
+	ca, cert, key = "./certs/ca.pem", "./certs/cert.pem", "./certs/key.pem"
 	if _, err := os.Stat(ca); err != nil {
 		log.Fatalf("%s not found\n", ca)
 	}
