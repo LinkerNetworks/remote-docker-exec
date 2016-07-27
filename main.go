@@ -23,10 +23,10 @@ func main() {
 
 // RootCmd is root command of remote-docker-exec
 var rootCmd = &cobra.Command{
-	Use:     "remote-docker-exec [PublicIP] [DockerDaemonPort] [ContainerId]",
+	Use:     "remote-docker-exec [ContainerId]",
 	Short:   "remote-docker-exec is a WebSocket with SSL shell, it can connect to docker container, and act as a remote docker exec.",
 	Long:    "remote-docker-exec is a WebSocket with SSL shell, it can connect to docker container, and act as a remote docker exec. For linker internal use only.",
-	Example: "./remote-docker-exec 52.78.72.139 2376 ffcede5a47cb",
+	Example: "./remote-docker-exec ffcede5a47cb",
 	Run: func(cmd *cobra.Command, args []string) {
 		if runtime.GOOS != "linux" {
 			log.Fatalln("Only linux is supported now.")
@@ -34,12 +34,10 @@ var rootCmd = &cobra.Command{
 		}
 
 		// example
-		// remote-docker-exec 52.77.230.38 2376 c3598346f0d7
-		if cmd.Flags().NArg() == 3 {
-			publicIP := cmd.Flags().Args()[0]
-			dockerDaemonPort := cmd.Flags().Args()[1]
-			containerId := cmd.Flags().Args()[2]
-			remoteDockerExec(publicIP, dockerDaemonPort, containerId)
+		// remote-docker-exec c3598346f0d7
+		if cmd.Flags().NArg() == 1 {
+			containerId := cmd.Flags().Args()[0]
+			remoteDockerExec(containerId)
 		}
 
 		// others
@@ -52,9 +50,11 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func remoteDockerExec(ip, port, containerId string) {
+func remoteDockerExec(containerId string) {
 	fmt.Println("Welcome to linker web console!")
 
+	ip := getEnv("SWARM_IP")
+	port := getEnv("SWARM_PORT")
 	endpoint := fmt.Sprintf("tcp://%s:%s", ip, port)
 	fmt.Printf("Connecting to %s, please wait...\n", endpoint)
 
@@ -93,4 +93,8 @@ func remoteDockerExec(ip, port, containerId string) {
 	if err != nil {
 		log.Fatalf("start exec error: %v\n", err)
 	}
+}
+
+func getEnv(key string) string {
+	return os.Getenv(key)
 }
