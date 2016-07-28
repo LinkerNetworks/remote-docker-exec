@@ -5,5 +5,7 @@ go:
 
 install:
         - go vet ./...
+        - go get github.com/fsouza/go-dockerclient
+        - go get github.com/spf13/cobra
         - go test ./...
         - go build
