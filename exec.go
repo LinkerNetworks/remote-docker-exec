@@ -82,5 +82,5 @@ func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 }
 
 func getSwarmEndpoints() string {
-	return getEnv(ENV_SWARM_ENDPOINTS)
+	return os.Getenv(ENV_SWARM_ENDPOINTS)
 }
