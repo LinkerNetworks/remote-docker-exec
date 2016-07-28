@@ -21,6 +21,11 @@ Support docker 1.11.x with API version 1.23
 # LICENSE
 MIT
 
+# Related projects
+[LinkerNetworks/linkerDcosDockerFile/linkerWebConsole][https://github.com/LinkerNetworks/linkerDcosDockerFile/tree/console/linkerWebConsole]: Dockerfile, golang binaries and config files
+
+[LinkerNetworks/gotty][https://github.com/LinkerNetworks/gotty]: Linker GoTTY is a simple command line tool that turns remote-docker-exec into web applications.
+
 [1]:https://docs.docker.com/engine/reference/commandline/dockerd/#bind-docker-to-another-host-port-or-a-unix-socket
 [2]:https://jamielinux.com/docs/openssl-certificate-authority/
 [3]:https://docs.docker.com/engine/security/https/
