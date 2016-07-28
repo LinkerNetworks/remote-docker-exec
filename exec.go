@@ -9,20 +9,10 @@ import (
 	"github.com/fsouza/go-dockerclient"
 )
 
-func prepare() (endpoint, cert, key, ca string) {
+func prepare() (endpoints []string, cert, key, ca string) {
 	fmt.Println("Welcome to linker web console!")
 
-	ip := getSwarmIp()
-	if len(strings.TrimSpace(ip)) == 0 {
-		log.Fatalln("invalid swarm ip")
-	}
-
-	port := getSwarmPort()
-	if len(strings.TrimSpace(port)) == 0 {
-		log.Fatalln("invalid swarm port")
-	}
-
-	endpoint = fmt.Sprintf("tcp://%s:%s", ip, port)
+	endpoints = strings.Split(getSwarmEndpoints(), ",")
 
 	ca, cert, key = "./certs/ca.pem", "./certs/cert.pem", "./certs/key.pem"
 	if _, err := os.Stat(ca); err != nil {
@@ -34,16 +24,27 @@ func prepare() (endpoint, cert, key, ca string) {
 	if _, err := os.Stat(key); err != nil {
 		log.Fatalf("%s not found\n", ca)
 	}
-
-	return endpoint, cert, key, ca
+	return endpoints, cert, key, ca
 }
 
-func remoteDockerExec(containerId string) {
-	endpoint, cert, key, ca := prepare()
+// connect to any available swarm endpoint
+func startRemoteDockerExec(containerId string) {
+	endpoints, cert, key, ca := prepare()
+	for _, endpoint := range endpoints {
+		err := remoteDockerExec(endpoint, cert, key, ca, containerId)
+		if err != nil {
+			log.Printf("exec container via swarm[%s] error: %v", endpoint, err)
+			continue
+		}
+	}
+}
+
+func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 	fmt.Printf("Connecting to %s, please wait...\n", endpoint)
 	client, err := docker.NewTLSClient(endpoint, cert, key, ca)
 	if err != nil {
-		log.Fatalf("new tls client error: %v\n", err)
+		log.Printf("new tls client error: %v\n", err)
+		return
 	}
 
 	fmt.Printf("Connecting to container %s, please wait...\n", containerId)
@@ -59,7 +60,8 @@ func remoteDockerExec(containerId string) {
 
 	exec, err := client.CreateExec(createOpts)
 	if err != nil {
-		log.Fatalf("create exec error: %v\n", err)
+		log.Printf("create exec error: %v\n", err)
+		return
 	}
 
 	// start exec
@@ -73,14 +75,12 @@ func remoteDockerExec(containerId string) {
 
 	err = client.StartExec(exec.ID, startOpts)
 	if err != nil {
-		log.Fatalf("start exec error: %v\n", err)
+		log.Printf("start exec error: %v\n", err)
+		return
 	}
+	return
 }
 
-func getSwarmIp() string {
-	return getEnv("SWARM_IP")
-}
-
-func getSwarmPort() string {
-	return getEnv("SWARM_PORT")
+func getSwarmEndpoints() string {
+	return getEnv("SWARM_ENDPOINTS")
 }

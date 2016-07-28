@@ -10,7 +10,7 @@ import (
 
 // RootCmd is root command of remote-docker-exec
 var rootCmd = &cobra.Command{
-	Use:     "remote-docker-exec [ContainerId]",
+	Use:     "remote-docker-exec [Container ID/Name]",
 	Short:   "remote-docker-exec is a WebSocket with SSL shell, it can connect to docker container, and act as a remote docker exec.",
 	Long:    "remote-docker-exec is a WebSocket with SSL shell, it can connect to docker container, and act as a remote docker exec. For linker internal use only.",
 	Example: "./remote-docker-exec ffcede5a47cb",
@@ -24,7 +24,7 @@ var rootCmd = &cobra.Command{
 		// remote-docker-exec c3598346f0d7
 		if cmd.Flags().NArg() == 1 {
 			containerId := cmd.Flags().Args()[0]
-			remoteDockerExec(containerId)
+			startRemoteDockerExec(containerId)
 		}
 
 		// others
