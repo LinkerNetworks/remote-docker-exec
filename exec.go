@@ -14,7 +14,7 @@ func prepare() (endpoints []string, cert, key, ca string) {
 
 	endpoints = strings.Split(getSwarmEndpoints(), ",")
 
-	ca, cert, key = "./certs/ca.pem", "./certs/cert.pem", "./certs/key.pem"
+	ca, cert, key = PATH_CA, PATH_CERT, PATH_KEY
 	if _, err := os.Stat(ca); err != nil {
 		log.Fatalf("%s not found\n", ca)
 	}
@@ -82,5 +82,5 @@ func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 }
 
 func getSwarmEndpoints() string {
-	return getEnv("SWARM_ENDPOINTS")
+	return getEnv(ENV_SWARM_ENDPOINTS)
 }
