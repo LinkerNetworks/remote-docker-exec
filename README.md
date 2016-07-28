@@ -1,11 +1,8 @@
-[![Go Report](https://goreportcard.com/badge/github.com/zyfdegh/remote-docker-exec)](https://goreportcard.com/report/github.com/zyfdegh/remote-docker-exec)
+[![Go Report](https://goreportcard.com/badge/github.com/LinkerNetworks/remote-docker-exec)](https://goreportcard.com/report/github.com/LinkerNetworks/remote-docker-exec)
+[![Build Status](https://travis-ci.org/LinkerNetworks/remote-docker-exec.svg)](https://travis-ci.org/LinkerNetworks/remote-docker-exec)
 
 # remote-docker-exec
 Connect to docker daemon or swarm with TLS. Run command 'sh' in container.
-
-Screenshot:
-
-![Mdviewer logo](https://raw.githubusercontent.com/zyfdegh/remote-docker-exec/master/raw/screenshot-01.png)
 
 # Precondition
 To run this programme, a TLS enabled docker daemon is required with port binded.
@@ -16,16 +13,10 @@ To enable TLS(SSL), you need generate cert files by yourself with **openssl**, f
 
 # Params
 
-**PublicIP:** public IP of docker daemon or swarm
-
-**DockerDaemonPort:** listening port of docker daemon or swarm
-
 **ContainerId:** name or ID of container. For docker daemon, support containers created by daemon. For swarm, support containers created by all daemons in cluster.
 
 # Version
 Support docker 1.11.x with API version 1.23
-
-Note that docker 1.12 has merged swarm into daemon, not test so far.
 
 # LICENSE
 MIT
