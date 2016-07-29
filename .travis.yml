@@ -7,5 +7,6 @@ install:
         - go vet ./...
         - go get github.com/fsouza/go-dockerclient
         - go get github.com/spf13/cobra
+        - go get github.com/bmizerany/assert
         - go test ./...
         - go build
