@@ -69,7 +69,8 @@ func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 	startOpts.Tty = true
 	startOpts.RawTerminal = true
 	startOpts.Detach = false
-	startOpts.ErrorStream = os.Stderr
+	// if tty enabled, set error stream to stdout.
+	startOpts.ErrorStream = os.Stdout
 	startOpts.InputStream = os.Stdin
 	startOpts.OutputStream = os.Stdout
 
