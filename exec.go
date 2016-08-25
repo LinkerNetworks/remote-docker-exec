@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/fsouza/go-dockerclient"
+	"github.com/zyfdegh/go-dockerpty"
 )
 
 func prepare() (endpoints []string, cert, key, ca string) {
@@ -64,17 +65,8 @@ func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 		return
 	}
 
-	// start exec
-	startOpts := docker.StartExecOptions{}
-	startOpts.Tty = true
-	startOpts.RawTerminal = true
-	startOpts.Detach = false
-	// if tty enabled, set error stream to stdout.
-	startOpts.ErrorStream = os.Stdout
-	startOpts.InputStream = os.Stdin
-	startOpts.OutputStream = os.Stdout
-
-	err = client.StartExec(exec.ID, startOpts)
+	// start tty
+	err = dockerpty.StartExec(client, exec)
 	if err != nil {
 		log.Printf("start exec error: %v\n", err)
 		return
