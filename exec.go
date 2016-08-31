@@ -56,7 +56,9 @@ func remoteDockerExec(endpoint, cert, key, ca, containerId string) (err error) {
 	createOpts.AttachStdout = true
 	createOpts.AttachStderr = true
 	createOpts.Tty = true
-	createOpts.Cmd = []string{"sh"}
+	// select shell sequence
+	// bash -> sh -> zsh -> fish -> csh -> tcsh -> scsh -> ksh -> rc
+	createOpts.Cmd = []string{"sh", "-c", "bash || sh || zsh || fish || csh || tcsh || scsh || ksh || rc"}
 	createOpts.Container = containerId
 
 	exec, err := client.CreateExec(createOpts)
