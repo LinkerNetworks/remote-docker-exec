@@ -8,5 +8,6 @@ install:
         - go get github.com/fsouza/go-dockerclient
         - go get github.com/spf13/cobra
         - go get github.com/bmizerany/assert
+        - go get github.com/zyfdegh/go-dockerpty
         - go test ./...
         - go build
